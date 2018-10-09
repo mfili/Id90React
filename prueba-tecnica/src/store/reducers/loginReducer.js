@@ -6,7 +6,8 @@ export default function reducer(state = {
   refresh_token:'',
   autenticationMessage: '',
   passwordAutentication: false,
-  userAutentication: false
+  userAutentication: false,
+  airlineId:0
 }, action) {
 
   switch (action.type) {
@@ -21,7 +22,7 @@ export default function reducer(state = {
       state.autentication = true
       state.access_token = action.payload.data.access_token
       state.refresh_token = action.payload.data.refresh_token
-      state.companyId = action.meta.companyId
+      state.airlineId = action.meta.airlineId
       state.passwordAutentication = false
       state.userAutentication = false
       state.autenticationMessage = ''
@@ -50,15 +51,7 @@ export default function reducer(state = {
       state.passwordAutentication = false
       state.userAutentication = false
       state.autenticationMessage = ''
-      break
-    case 'LOG_IN2':
-      state = { ...state }
-      state.logged = true
-      state.logging = false
-      state.autentication = true
-      state.passwordAutentication = false
-      state.userAutentication = false
-      state.autenticationMessage = ''
+      state.airlineId = 0
       break
   }
 

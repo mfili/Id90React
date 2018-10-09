@@ -1,21 +1,16 @@
-import axios from 'axios'
-export function login(username, password, companyId){    
-    
+ import axios from 'axios' 
+ import {restApiURL} from '../config'
+export function login(username,password,airlineId){
     const options = {
-        url: 'http://intranet.itlatingroup.cl:8090/sso/oauth/token?grant_type=password&username='+username+'&password='+password,
+        url: restApiURL + '/session.json?session[airline]=HAWAIIAN AIRLINES (HA)&session[username]='+username+'&session[password]='+password+'&session[remember_me]=1',
         method: 'POST',
         headers: {
           'ContentType': 'application/json'
-        },
-        auth: {
-            username: 'encuesta_satisfaccion',
-            password: 'Aa123456'
         }
     }
-    
     return {
         type: "LOG_IN",
-        meta: {companyId: companyId},
+        meta: {airlineId: airlineId},
         payload: axios(options)
     }
 }
@@ -29,11 +24,5 @@ export function logout(){
 export function clearLogin(){    
     return {
         type: "CLEAR_LOGIN"
-    }
-}
-
-export function login2(){    
-    return {
-        type: "LOG_IN2"
     }
 }

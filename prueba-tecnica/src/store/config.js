@@ -1,0 +1,1 @@
+export const restApiURL = 'https://beta.id90travel.com'
