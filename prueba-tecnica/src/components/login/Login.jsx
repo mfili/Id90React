@@ -14,26 +14,12 @@ import { fetchAirlinesList } from '../../store/actions/airlineActions'
 import '../../style/login.css'
 
 
-
-const styles = theme => ({
-    button: {
-        margin: theme.spacing.unit
-    },
-    container: {
-        display: 'flex',
-        flexWrap: 'wrap',
-    },
-    FormHelperText: {
-        color: 'red'
-    }
-})
-
 @connect((store) => {
     return {
-        /*autenticationMessage: store.login.autenticationMessage,
+        autenticationMessage: store.login.autenticationMessage,
         passwordAutentication: store.login.passwordAutentication,
         userAutentication: store.login.userAutentication,
-        logging: store.login.logging,*/
+        //logging: store.login.logging,
         airlines: store.airline.airline
     }
 })
@@ -72,6 +58,7 @@ class Login extends React.Component {
     }
 
     setAirline(e) {
+        console.log("EEE",e.target)
         this.setState(
             {
                 airlineId: e.target.value
@@ -203,4 +190,4 @@ class Login extends React.Component {
         )
     }
 }
-export default withRouter(withStyles(styles)(Login))
+export default withRouter(withStyles()(Login))

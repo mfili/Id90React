@@ -1,6 +1,7 @@
  import axios from 'axios' 
  import {restApiURL} from '../config'
 export function login(username,password,airlineId){
+    console.log("NAME AIRLINE",airlineId)
     const options = {
         url: restApiURL + '/session.json?session[airline]=HAWAIIAN AIRLINES (HA)&session[username]='+username+'&session[password]='+password+'&session[remember_me]=1',
         method: 'POST',

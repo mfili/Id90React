@@ -17,7 +17,9 @@ import Save from '@material-ui/icons/sdStorage'
 import Cancel from '@material-ui/icons/Cancel'
 import store from '../../store/store'
 import { connect } from 'react-redux'
-//import { postPeriod } from '../../store/actions/period/periodsActions'
+import Hotels from './Hotels.jsx'
+import {changeValue, getHotels } from '../../store/actions/hotelActions'
+import { logout } from '../../store/actions/loginActions'
 
 import  moment from 'moment'
 
@@ -29,6 +31,9 @@ const styles = theme => ({
         justifyContent: 'center',
         flexWrap: 'wrap',
         padding: theme.spacing.unit / 2
+    },
+    menuButton: {
+        marginRight: '20' 
     },
     tolbar: {
         position: 'relative',
@@ -87,23 +92,31 @@ const styles = theme => ({
 
 @connect((store) => {
     return {
-        //saved: store.periodos.saved
+        hotels:store.hotel.hotels,
+        guests: store.hotel.guests,
+        checkin: store.hotel.checkin,
+        checkout: store.hotel.checkout,
+        destination: store.hotel.destination,
+        keyword:store.hotel.keyword,
+        rooms: store.hotel.rooms,
+        longitude:store.hotel.longitude,
+        latitude:store.hotel.latitude,
+        sort_criteria:store.hotel.sort_criteria,
+        sort_order:store.hotel.sort_order,
+        per_page:store.hotel.per_page,
+        page:store.hotel.page,
+        currency:store.hotel.currency,
+        price_low:store.hotel.price_low,
+        price_high:store.hotel.price_high
     }
 })
 
 class HotelForm extends Component {
     constructor(props) {
         super(props)
-        this.state = {
-            guests: 1,
-            checkin: Date(),
-            checkout: Date(),
-            destination: '',
-            rooms: 1,
-        }
         this.handleValueChange = this.handleValueChange.bind(this)
         this.search = this.search.bind(this)
-        this.cancelPeriod = this.cancelPeriod.bind(this)
+        this.logout = this.logout.bind(this)
     }
 
     handleValueChange = event => {
@@ -115,21 +128,12 @@ class HotelForm extends Component {
     }
 
     search = () => {
-        var data = {}
-        data = {
-            "idPeriodo": this.props.idPeriodo,
-            "nroPeriodo": this.props.nroPeriodo,
-            "estado": this.props.estado,
-            "descripcion": this.props.descripcion,
-            "diaInicio": this.props.diaInicio,
-            "duracionDias": this.props.duracionDias
-        }
-        store.dispatch(searchHotels(data))
+        store.dispatch(getHotels(this.props.guests,this.props.checkin,this.props.checkout,this.props.destination, this.props.rooms, this.props.currency))
     }
     
-    cancelPeriod = () => {
-        const { history } = this.props
-        history.push('/periodo')
+
+    logout(e) {
+        store.dispatch(logout())
     }
 
     render() {
@@ -140,9 +144,18 @@ class HotelForm extends Component {
         const { classes, theme } = this.props
         return (
             <form className={classes.form} noValidate autoComplete="off">
-                <Toolbar className={classes.tolbar}>
-                    <Typography type="title">Buscá tu Alojamiento</Typography>
+            <AppBar position="static" className={classes.toolBarStyle} >
+                <Toolbar>
+                    <Typography type="title" color="inherit" className={classes.flex}>
+                            Buscá tu Alojamiento
+                    </Typography>
+                        <Button color="inherit" className={classes.menuButton}
+                            raised 
+                            onClick = {this.logout} >
+                                Logout
+                        </Button>
                 </Toolbar>
+            </AppBar>
                 <div className={classes.divGlobal}>
                     <FormGroup >
                         <Grid container spacing={0}>
@@ -152,7 +165,7 @@ class HotelForm extends Component {
                                         id="guests"
                                         label="Cantidad de huespedes"
                                         type="number"
-                                        value={this.state.guests}
+                                        value={this.props.guests}
                                         onChange={this.handleValueChange}
                                     />
                                 </FormControl>
@@ -164,7 +177,7 @@ class HotelForm extends Component {
                                     keyboard
                                     label="Entrada"
                                     onError={console.log}
-                                    value={this.state.checkin}
+                                    value={this.props.checkin}
                                     onChange={this.handleDateChange.bind(this, 'checkin')}
                                     format="YYYY-MM-DD"
                                 />
@@ -176,7 +189,7 @@ class HotelForm extends Component {
                                     keyboard
                                     label="Salida"
                                     onError={console.log}
-                                    value={this.state.checkout}
+                                    value={this.props.checkout}
                                     onChange={this.handleDateChange.bind(this, 'checkout')}
                                     format="YYYY-MM-DD"
                                 />
@@ -186,7 +199,7 @@ class HotelForm extends Component {
                                     <TextField className={classes.field}
                                         id="destination"
                                         label="Destino"
-                                        value={this.state.destination}
+                                        value={this.props.destination}
                                         onChange={this.handleValueChange}
                                     />
                                 </FormControl>
@@ -195,9 +208,19 @@ class HotelForm extends Component {
                                 <FormControl className={classes.formControl}>
                                     <TextField className={classes.field}
                                         id="rooms"
-                                        label="Habitaciones"
+                                        label="Cantidad de habitaciones"
                                         type="number"
-                                        value={this.state.rooms}
+                                        value={this.props.rooms}
+                                        onChange={this.handleValueChange}
+                                    />
+                                </FormControl>
+                            </Grid>
+                            <Grid item xs={4}>
+                                <FormControl className={classes.formControl}>
+                                    <TextField className={classes.field}
+                                        id="currency"
+                                        label="Moneda"
+                                        value={this.props.currency}
                                         onChange={this.handleValueChange}
                                     />
                                 </FormControl>
@@ -208,6 +231,9 @@ class HotelForm extends Component {
                 <Button className="login-button" onClick={this.search} raised color="primary"  >
                     Buscar
                 </Button>
+                <div className={classes.divGlobal}>
+                    <Hotels/>
+                </div>
             </form>
         )
     }

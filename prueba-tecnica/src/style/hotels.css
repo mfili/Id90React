@@ -1,0 +1,19 @@
+
+  .root {
+    max-width: 80vw;
+    margin-left: 10vw;
+  }
+
+  .table {
+    min-width: 600;
+    height: 60vh;
+    overflow-x: auto;
+    overflow-y: auto;
+  }
+
+  .tableWrapper {
+    overflow-x: auto;
+    overflow-y: auto;
+    height: 100%;
+  }
+
